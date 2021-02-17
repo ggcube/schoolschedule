@@ -11,6 +11,8 @@ if 'class_sheet' in new_wb.get_sheet_names():
     new_wb.remove_sheet(new_wb.get_sheet_by_name('class_sheet')) 
 class_sheet.title = 'class_sheet' # 工作表改名成預設
 # 生成輸出路徑
+if not(os.path.isdir('output')):
+    os.makedirs('output')
 output_dir = os.path.join('output',datetime.datetime.now().strftime('%Y%m%d-%H%M%S')+'.xlsx')
 
 
