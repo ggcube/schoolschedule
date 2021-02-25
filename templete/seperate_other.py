@@ -1,8 +1,31 @@
-import openpyxl, os, sys, datetime
+import openpyxl, os, sys, datetime, csv
 temp_ver ='1.0' # 樣板版本
-# 讀取原課表檔案
-wb = openpyxl.open(os.path.join('input',os.listdir('input')[0])) 
-sheet = wb.get_sheet_by_name(wb.get_sheet_names()[0])
+def text2num(t):
+    if t=='一':
+        return 1
+    if t=='二':
+        return 2
+    if t=='三':
+        return 3
+    if t=='四':
+        return 4
+    if t=='五':
+        return 5
+    if t=='六':
+        return 6
+    if t=='七':
+        return 7
+    if t=='八':
+        return 8
+    if t=='九':
+        return 9
+    return 0
+
+
+
+# # 讀取原課表檔案
+# wb = openpyxl.open(os.path.join('input',os.listdir('input')[0])) 
+# sheet = wb.get_sheet_by_name(wb.get_sheet_names()[0])
 # 讀取樣板文件
 templete_dir = os.path.join('templete','class_schedule_v'+temp_ver+'.xlsx')
 new_wb = openpyxl.open(templete_dir)
@@ -14,7 +37,6 @@ class_sheet.title = 'class_sheet' # 工作表改名成預設
 if not(os.path.isdir('output')):
     os.makedirs('output')
 output_dir = os.path.join('output',datetime.datetime.now().strftime('%Y%m%d-%H%M%S')+'.xlsx')
-
 
 # # 開目標 xlsx 物件(或新增)
 # if len(os.listdir('output')) == 0:
@@ -36,33 +58,27 @@ output_dir = os.path.join('output',datetime.datetime.now().strftime('%Y%m%d-%H%M
 #     sys.exit()
 
 
-# 解析課表檔案
-class_count = sheet.max_row - 1 # 班級數
-'''
-    # 星期 int((column-3)/7+1)
-    # 堂數 (column-3)%7+1 
-    # 解析單一儲存格
-        # cell_data = sheet['C2'].value.split('_')
-        # 第一格是課程名稱，第三格是教師姓名
-'''
 # 製作以班級為主鍵的課務資料
     # 寫入標題
 class_title = ['班級','星期','堂次','課程名稱','教師']
 for i in range(5):
     class_sheet.cell(row=1,column=i+1).value = class_title[i]
-    # 寫入資料
-data_num = 2 # 第一列寫入標題了，從第二列開始。
-for r in range(2,sheet.max_row + 1):
-    for c in range(3,38):
-        cell_data = sheet.cell(row=r,column=c).value.split('_')
-        class_sheet.cell(row=data_num,column=1).value = int(sheet.cell(row=r,column=1).value)
-        class_sheet.cell(row=data_num,column=2).value = int((c-3)/7+1)
-        class_sheet.cell(row=data_num,column=3).value = (c-3)%7+1 
-        class_sheet.cell(row=data_num,column=4).value = cell_data[0]
-        class_sheet.cell(row=data_num,column=5).value = cell_data[2]
+data_num = 1 # 第一列寫入標題了，從第二列開始。
+# 讀取原課表檔案 '.csv' 並寫入樣版檔
+with open(os.path.join('input',os.listdir('input')[0]), newline='') as csvfile:
+    rows = csv.reader(csvfile)
+    for row in rows:
+        if data_num == 1:
+            data_num += 1
+            continue
+        class_sheet.cell(row=data_num,column=1).value = text2num(row[2][0])*100+int(row[3][1:3])
+        class_sheet.cell(row=data_num,column=2).value = text2num(row[0][1]) 
+        class_sheet.cell(row=data_num,column=3).value = text2num(row[1][1]) 
+        class_sheet.cell(row=data_num,column=4).value = row[5]
+        class_sheet.cell(row=data_num,column=5).value = row[4]
         data_num += 1
-            
+         
 # 存檔結束
 new_wb.save(output_dir)
-print('課表檔案已產製...')
+print('已產生課表excel檔案...')
 os.system('pause')
