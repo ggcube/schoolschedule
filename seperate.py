@@ -53,14 +53,16 @@ for i in range(5):
     # 寫入資料
 data_num = 2 # 第一列寫入標題了，從第二列開始。
 for r in range(2,sheet.max_row + 1):
-    for c in range(3,38):
+    for c in range(3,sheet.max_column+1):
         cell_data = sheet.cell(row=r,column=c).value.split('_')
-        class_sheet.cell(row=data_num,column=1).value = int(sheet.cell(row=r,column=1).value)
-        class_sheet.cell(row=data_num,column=2).value = int((c-3)/7+1)
-        class_sheet.cell(row=data_num,column=3).value = (c-3)%7+1 
-        class_sheet.cell(row=data_num,column=4).value = cell_data[0]
-        class_sheet.cell(row=data_num,column=5).value = cell_data[2]
-        data_num += 1
+        if len(cell_data) >= 2 : # 空的儲存格不會執行
+            class_sheet.cell(row=data_num,column=1).value = int(sheet.cell(row=r,column=1).value)
+            class_sheet.cell(row=data_num,column=2).value = int(sheet.cell(row=1,column=c).value[1])
+            class_sheet.cell(row=data_num,column=3).value = int(sheet.cell(row=1,column=c).value[2]) 
+            class_sheet.cell(row=data_num,column=4).value = cell_data[0]
+            class_sheet.cell(row=data_num,column=5).value = cell_data[2]
+            # print('test', sheet.cell(row=r,column=5).value)
+            data_num += 1
             
 # 存檔結束
 new_wb.save(output_dir)

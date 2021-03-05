@@ -4,7 +4,7 @@
    電腦需安裝 python 程式 (建議3.7版本以上)  
    連結網址：
    ```
-   https://www.python.org/ftp/python/3.9.2/python-3.9.2-amd64.exe
+   <https://www.python.org/ftp/python/3.9.2/python-3.9.2-amd64.exe>
    ```
    注意安裝時需勾選加入PATH(路徑)
    ![安裝python](./templete/fig1.png)
@@ -21,7 +21,7 @@ pip install openpyxl
    ![安裝套件](./templete/fig3.png)  
 一直按Enter即可安裝完成。
 
-## 使用軟體(產生excel課表檔案)
+## 使用軟體(產生Excel課表檔案)
 1. 點兩下```執行程式.bat```即開始執行。
 2. 執行完成後，```ouput```資料夾內就是完成匯入的試算表檔案，可以複製到其他地方使用。
 
