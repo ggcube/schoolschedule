@@ -1,5 +1,5 @@
 import openpyxl, os, sys, datetime
-temp_ver ='1.1' # 樣板版本
+temp_ver ='1.2' # 樣板版本
 # 讀取原課表檔案
 wb = openpyxl.open(os.path.join('input',os.listdir('input')[0])) 
 sheet = wb.get_sheet_by_name(wb.get_sheet_names()[0])
